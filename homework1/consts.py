@@ -1,0 +1,6 @@
+TIMEOUT = 20
+CORRECT_EMAIL = "ekaterina.kachalova@gmail.com"
+CORRECT_PASSWORD = "1z2s3c"
+INCORRECT_EMAIL = "fjjgjfjf"
+INCORRECT_PASSWORD = "12345"
+ATTEMPS_COUNT = 5
