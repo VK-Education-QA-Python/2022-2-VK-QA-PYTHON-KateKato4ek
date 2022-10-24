@@ -13,7 +13,12 @@ class CampaignPage(BasePage):
     
     def create_new_campaign(self, image_path):
         self.campaign_name = random_string()
-        self.click(self.locators.CREATE_NEW_CAMPAIGN_BTN_LOCATOR, timeout=TIMEOUT)
+    
+        if self.is_element_available(self.locators.CREATE_NEW_CAMPAIGN_BTN_LOCATOR):
+            self.click(self.locators.CREATE_NEW_CAMPAIGN_BTN_LOCATOR)
+        else:
+            self.click(self.locators.CREATE_NEW_CAMPAIGN_ONBOARDING_BTN_LOCATOR)
+            
         self.click(self.locators.TRAFFIC_BTN_LOCATOR, timeout=TIMEOUT)
         link = self.campaign_name + '.com'
         self.fill_up(self.locators.ENTER_LINK_FLD_LOCATOR, link, timeout=TIMEOUT)
@@ -28,16 +33,14 @@ class CampaignPage(BasePage):
         self.click(self.locators.CREATE_CAMPAIGN_BTN, timeout=TIMEOUT)
     
     def is_campaign_created(self):
-        self.find(self.locators.CHECK_CREATED_CAMPAIGN_LOCATOR, timeout=TIMEOUT)
+        self.fill_up(self.locators.SEARCH_CANPAIGN_FLD_LOCATOR, self.campaign_name, timeout=TIMEOUT)
         
-        return self.campaign_name in self.driver.page_source
+        return not self.is_element_available(self.locators.NO_CAMPAIGN_FOUND_LOCATOR)
     
     def delete_campaign_page(self):
-        self.click(self.locators.SELECT_LIST_TYPE, timeout=TIMEOUT)
-        self.click(self.locators.SELECT_SHOW_ALL_CAMPAIGNS, timeout=TIMEOUT)
-        name_cell_locator = self.format_locator(self.locators.NAME_CELL_TEMPLATE_CPNG_LOCATOR, self.campaign_name)
-        row_id = self.get_attribute(name_cell_locator, value='data-row-id', timeout=TIMEOUT)
-        check_locator = self.format_locator(self.locators.CHECK_TEMPLATE_CPNG_LOCATOR, row_id)
-        self.click(check_locator)
+        self.fill_up(self.locators.SEARCH_CANPAIGN_FLD_LOCATOR, self.campaign_name, timeout=TIMEOUT)
+        campaign_found_locator = self.format_locator(self.locators.FOUND_CAMPAGN_LOCATOR, self.campaign_name)
+        self.click(campaign_found_locator, timeout=TIMEOUT)
+        self.click(self.locators.CHECK_CREATED_CAMPAIGN_LOCATOR)
         self.click(self.locators.ACTIONS_CAMPAIGN_BTN_LOCATOR)
         self.click(self.locators.DELETE_CAMPAIGN_BTN_LOCATOR, timeout=TIMEOUT)

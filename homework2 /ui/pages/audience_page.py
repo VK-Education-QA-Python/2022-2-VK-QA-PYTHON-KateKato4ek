@@ -34,17 +34,17 @@ class AudiencePage(BasePage):
         self.__create_segment()
     
     def is_segment_created(self):
-        self.is_element_available(self.locators.CREATED_SEGMENT_ID_LOCATOR, timeout=TIMEOUT)
+        self.fill_up(self.locators.FIND_CREATED_SEGMENT_FLD_LOCATOR, self.segment_name, timeout=TIMEOUT)
         
-        return self.segment_name in self.driver.page_source
+        return not self.is_element_available(self.locators.NO_SEGMENT_FOUND_LOCATOR)
     
     def delete_segment(self):
-        name_cell_locator = self.format_locator(self.locators.NAME_CELL_TEMPLATE_LOCATOR, self.segment_name)
-        row_id = self.get_attribute(name_cell_locator, value='data-row-id')
-        check_locator = self.format_locator(self.locators.CHECK_TEMPLATE_LOCATOR, row_id)
-        self.click(check_locator)
+        self.fill_up(self.locators.FIND_CREATED_SEGMENT_FLD_LOCATOR, self.segment_name, timeout=TIMEOUT)
+        campaign_found_locator = self.format_locator(self.locators.FOUND_SEGMENT_LOCATOR, self.segment_name)
+        self.click(campaign_found_locator, timeout=TIMEOUT)
+        self.click(self.locators.CHECK_CREATED_SEGMENT_LOCATOR)
         self.click(self.locators.ACTIONS_BTN_LOCATOR)
-        self.click(self.locators.DELETE_AUD_SEG_BTN_LOCATOR)
+        self.click(self.locators.DELETE_AUD_SEG_BTN_LOCATOR, timeout=TIMEOUT)
     
     def add_source(self):
         self.click(self.locators.GROUPS_BTN_LOCATOR, timeout=TIMEOUT)   

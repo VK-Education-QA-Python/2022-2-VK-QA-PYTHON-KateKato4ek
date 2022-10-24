@@ -57,9 +57,10 @@ def base_temp_dir():
 
 @pytest.fixture(scope='function')
 def temp_dir(request):
-    test_dir = os.path.join(request.config.base_temp_dir, request._pyfuncitem.nodeid)
-    os.makedirs(test_dir)
-    return test_dir
+    test_name = request._pyfuncitem.nodeid.replace('/', '_').replace(':', '_')
+    temp_dir = os.path.join(request.config.base_temp_dir, test_name)
+    os.makedirs(temp_dir)
+    return temp_dir
 
 @pytest.fixture(scope='function')
 def logger(temp_dir, config):
