@@ -1,0 +1,14 @@
+{
+    "name": "Новый аудиторный сегмент",
+    "pass_condition": 1,
+    "relations": [
+        {
+        "object_type": "remarketing_vk_group",
+        "params": {
+            "source_id": 0,
+            "type": "positive"
+        }
+        }
+    ],
+    "logicType": "or"
+}

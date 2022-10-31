@@ -1,0 +1,13 @@
+{
+	"name": "Новый аудиторный сегмент",
+	"pass_condition": 1,
+	"relations": [{
+		"object_type": "remarketing_player",
+		"params": {
+			"type": "positive",
+			"left": 365,
+			"right": 0
+		}
+	}],
+	"logicType": "or"
+}
