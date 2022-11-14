@@ -3,7 +3,7 @@ from client import MysqlClient
 from parser import Parser
 
 def pytest_addoption(parser):
-    parser.addoption('--path', default='./access.logs')
+    parser.addoption('--path', default='./homework6/access.logs')
 
 def pytest_configure(config):
     path = config.getoption('--path')
