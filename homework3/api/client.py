@@ -5,6 +5,7 @@ import json
 import os.path
 
 from api.logger import Logger
+from api.utils import random_string
 
 class ResponseStatusCodeException(Exception):
     pass
@@ -69,8 +70,6 @@ class ApiClient:
                                  location='api/v2/vk_groups.json',
                                  params=params)
         
-        self.logger.logger.info(f"123123 {response}")
-        
         group_id = response["items"][0]["id"]
         
         self.logger.logger.info(f"GROUP_ID {group_id}")
@@ -99,6 +98,10 @@ class ApiClient:
             segment_json = json.load(f)
         
         segment_json["relations"][0]["params"]["source_id"] = source_id
+        
+        segment_name = random_string()
+        segment_json['name'] = segment_name
+        
         self.logger.logger.info(f"SEGMENT_JSON {segment_json}")
         
         response = self._request(url=self.base_url,
@@ -219,6 +222,9 @@ class ApiClient:
         
         campaign_json['banners'][0]['content']['image_240x400']['id'] = image_id
         
+        campaign_name = random_string()
+        campaign_json['name'] = campaign_name
+        
         response = self._request(url=self.base_url,
                                  method='POST',
                                  location='api/v2/campaigns.json',
@@ -242,3 +248,20 @@ class ApiClient:
         count = response["count"]
         
         return count == 1
+
+    def delete_campaign(self, campaign_id):
+        json = [{"id": campaign_id,
+                 "status": "deleted"}]
+        
+        response = self._request(url=self.base_url,
+                                 method='POST',
+                                 location='api/v2/campaigns/mass_action.json',
+                                 expected_status=204,
+                                 headers=self.headers_csrf(),
+                                 json=json,
+                                 jsonify=False)
+        
+        return response.ok
+        
+        
+        

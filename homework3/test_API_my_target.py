@@ -32,7 +32,7 @@ class TestApi(ApiBase):
         with allure.step("Delete source"):
             self.api_client.delete_source(source_id)
     
-    @allure.story("Create campaign")
+    @allure.story("Create and delete campaign")
     @pytest.mark.API
     def test_create_campaign(self, temp_image):
         with allure.step("Upload image"):
@@ -41,3 +41,5 @@ class TestApi(ApiBase):
             campaign_id = self.api_client.post_camp(image_id)
         with allure.step("Check campaign creation"):
             assert self.api_client.check_campaign_creation(campaign_id)
+        with allure.step("Delete campaign"):
+            self.api_client.delete_campaign(campaign_id)

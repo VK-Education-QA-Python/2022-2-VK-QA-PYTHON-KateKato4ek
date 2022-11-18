@@ -24,56 +24,6 @@ def pytest_configure(config):
 
     config.base_temp_dir = base_dir
 
-@pytest.fixture(scope='function')
-def driver(config, temp_dir):
-    browser = config['browser']
-    url = config['url']
-    headless = config["headless"]
-    selenoid = config['selenoid']
-    vnc = config['vnc']
-    
-    options = Options()
-    options.add_experimental_option("prefs", {"download.default_directory": temp_dir})
-    if headless:
-        options.add_argument("--headless")
-    
-    if selenoid:
-        capabilities = {
-            'browserName': 'chrome',
-            'version': '106.0',
-        }
-        if vnc:
-            capabilities['enableVNC'] = True
-        driver = webdriver.Remote(
-            'http://127.0.0.1:4444/wd/hub',
-            options=options,
-            desired_capabilities=capabilities
-        )
-    elif browser == 'chrome':
-        driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
-    elif browser == 'firefox':
-        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
-    else:
-        raise RuntimeError(f'Unsupported browser: "{browser}"')
-    
-    driver.get(url)
-    driver.set_window_size(1400, 800)
-    
-    yield driver
-    
-    driver.quit()
-
-def get_driver(browser_name):
-    if browser_name == 'chrome':
-        browser = webdriver.Chrome(executable_path=ChromeDriverManager().install())
-    elif browser_name == 'firefox':
-        browser = webdriver.Firefox(executable_path=GeckoDriverManager().install())
-    else:
-        raise RuntimeError(f'Unsupported browser: "{browser_name}"')
-    browser.set_window_size(1400, 800)
-    
-    return browser
-
 @pytest.fixture(scope='session')
 def credentials(repo_root, file_name='creds'):
     cred_path = os.path.join(repo_root, file_name)
