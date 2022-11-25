@@ -18,8 +18,6 @@ def pytest_configure(config):
     
     config.mock_server = flask_mock.run()
     Waiter.wait_ready(MOCK_HOST, MOCK_PORT)
-    
-    config.base_temp_dir = base_temp_dir()
 
 def pytest_unconfigure(config):
     config.app_server.shutdown()
@@ -39,7 +37,7 @@ def base_temp_dir():
 @pytest.fixture(scope='function')
 def temp_dir(request):
     test_name = request._pyfuncitem.nodeid.replace('/', '_').replace(':', '_')
-    temp_dir = os.path.join(request.config.base_temp_dir, test_name)
+    temp_dir = os.path.join(base_temp_dir(), test_name)
     os.makedirs(temp_dir)
     
     return temp_dir
