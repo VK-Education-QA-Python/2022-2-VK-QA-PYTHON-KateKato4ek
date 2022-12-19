@@ -7,3 +7,6 @@ pytest-xdist==3.0.2
 allure-pytest==2.11.1
 flask==2.2.2
 Werkzeug==2.2.2
+SQLAlchemy==1.4.44
+PyMySQL==1.0.2
+cryptography==38.0.3
